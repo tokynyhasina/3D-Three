@@ -1,6 +1,8 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import * as dat from "dat.gui";
+import stars from "./image/star.webp";
+import earth from "./image/earth.jpg";
 
 const renderer = new THREE.WebGL1Renderer();
 renderer.shadowMap.enabled = true;
@@ -8,6 +10,10 @@ renderer.shadowMap.enabled = true;
 document.body.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0xffffff, 0.01);
+const textureLaoder = new THREE.TextureLoader();
+
+scene.background = textureLaoder.load(stars);
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 const axesHelper = new THREE.AxesHelper(20);
@@ -36,7 +42,10 @@ plane.receiveShadow = true;
 scene.add(plane);
 
 const sphereGeometry = new THREE.SphereGeometry(4);
-const sphereMaterial = new THREE.MeshStandardMaterial({ color: 0xcccccc });
+const sphereMaterial = new THREE.MeshStandardMaterial({
+  color: 0xcccccc,
+  map: textureLaoder.load(earth),
+});
 const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 scene.add(sphere);
 sphere.position.set(-10, 10, 0);
@@ -99,7 +108,15 @@ function animation() {
   spotLight.intensity = options.intensity;
   sLightHelper.update();
 
-  sphere.position.y = 10 * Math.abs(Math.sin(step));
+  sphere.rotation.y += 0.01;
+
+  // sphere.position.y = 10 * Math.abs(Math.sin(step));
 }
 
 renderer.setAnimationLoop(animation);
+
+document.addEventListener("resize", function () {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
