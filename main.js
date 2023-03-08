@@ -48,7 +48,9 @@ const sphereMaterial = new THREE.MeshStandardMaterial({
   map: textureLaoder.load(earth),
 });
 const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-scene.add(sphere);
+const earthSystem = new THREE.Group();
+earthSystem.add(sphere);
+scene.add(earthSystem);
 sphere.position.set(-10, 10, 0);
 sphere.castShadow = true;
 sphere.receiveShadow = true;
@@ -72,7 +74,7 @@ scene.add(spotLight);
 spotLight.castShadow = true;
 spotLight.angle = 0.2;
 spotLight.position.set(-100, 100, 0);
-// const sLightHelper = new THREE.SpotLightHelper(spotLight);
+const sLightHelper = new THREE.SpotLightHelper(spotLight);
 // scene.add(sLightHelper);
 
 const orbit = new OrbitControls(camera, renderer.domElement);
@@ -112,6 +114,7 @@ function animation() {
 
   sphere.rotation.y += 0.01;
   moon.rotation.y -= 0.01;
+  earthSystem.rotation.x += 0.01;
 
   // sphere.position.y = 10 * Math.abs(Math.sin(step));
 }
@@ -122,10 +125,13 @@ const moonMaterial = new THREE.MeshStandardMaterial({
   map: textureLaoder.load(moonMap),
 });
 const moon = new THREE.Mesh(moonGeometry, moonMaterial);
-scene.add(moon);
+
+let moonSystem = new THREE.Group();
+moonSystem.add(moon);
 moon.castShadow = true;
 
 moon.position.set(-20, 20, 0);
+earthSystem.add(moonSystem);
 
 renderer.setAnimationLoop(animation);
 
