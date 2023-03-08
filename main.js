@@ -72,8 +72,8 @@ scene.add(spotLight);
 spotLight.castShadow = true;
 spotLight.angle = 0.2;
 spotLight.position.set(-100, 100, 0);
-const sLightHelper = new THREE.SpotLightHelper(spotLight);
-scene.add(sLightHelper);
+// const sLightHelper = new THREE.SpotLightHelper(spotLight);
+// scene.add(sLightHelper);
 
 const orbit = new OrbitControls(camera, renderer.domElement);
 orbit.update();
