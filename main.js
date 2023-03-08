@@ -3,6 +3,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import * as dat from "dat.gui";
 import stars from "./image/star.webp";
 import earth from "./image/earth.jpg";
+import moonMap from "./image/moon.jpg";
 
 const renderer = new THREE.WebGL1Renderer();
 renderer.shadowMap.enabled = true;
@@ -50,6 +51,7 @@ const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 scene.add(sphere);
 sphere.position.set(-10, 10, 0);
 sphere.castShadow = true;
+sphere.receiveShadow = true;
 
 // const ambiantLight = new THREE.AmbientLight(0x333333);
 // scene.add(ambiantLight);
@@ -109,9 +111,21 @@ function animation() {
   sLightHelper.update();
 
   sphere.rotation.y += 0.01;
+  moon.rotation.y -= 0.01;
 
   // sphere.position.y = 10 * Math.abs(Math.sin(step));
 }
+
+const moonGeometry = new THREE.SphereGeometry(2);
+const moonMaterial = new THREE.MeshStandardMaterial({
+  color: 0xcccccc,
+  map: textureLaoder.load(moonMap),
+});
+const moon = new THREE.Mesh(moonGeometry, moonMaterial);
+scene.add(moon);
+moon.castShadow = true;
+
+moon.position.set(-20, 20, 0);
 
 renderer.setAnimationLoop(animation);
 
